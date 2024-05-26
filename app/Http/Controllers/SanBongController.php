@@ -47,4 +47,26 @@ class SanBongController extends Controller
             'message'   =>  'Đã cập nhật sân bóng thành công!'
         ]);
     }
+    public function doiTrangThai(Request $request)
+    {
+        $san_bong = SanBong::find($request->id);
+        if ($san_bong) {
+            if ($san_bong->tinh_trang == 1) {
+                $san_bong->tinh_trang = 0;
+            } else {
+                $san_bong->tinh_trang = 1;
+            }
+            $san_bong->save();
+
+            return response()->json([
+                'status' => true,
+                'message' => "Đổi trạng thái sân bóng thành công!"
+            ]);
+        } else {
+            return response()->json([
+                'status' => false,
+                'message' => "Đã có lỗi xảy ra!"
+            ]);
+        }
+    }
 }

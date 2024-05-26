@@ -18,6 +18,8 @@ class NhanVienController extends Controller
     public function store(Request $request)
     {
         $data   =   $request->all();
+        $data['password'] = bcrypt($request->password);
+
         NhanVien::create($data);
 
         return response()->json([
@@ -46,5 +48,27 @@ class NhanVienController extends Controller
             'status'    =>  true,
             'message'   =>  'Đã cập nhật nhân viên thành công!'
         ]);
+    }
+    public function doiTrangThai(Request $request)
+    {
+        $nhan_vien = NhanVien::find($request->id);
+        if ($nhan_vien) {
+            if ($nhan_vien->tinh_trang == 1) {
+                $nhan_vien->tinh_trang = 0;
+            } else {
+                $nhan_vien->tinh_trang = 1;
+            }
+            $nhan_vien->save();
+
+            return response()->json([
+                'status' => true,
+                'message' => "Đổi trạng thái nhân viên thành công!"
+            ]);
+        } else {
+            return response()->json([
+                'status' => false,
+                'message' => "Đã có lỗi xảy ra!"
+            ]);
+        }
     }
 }
